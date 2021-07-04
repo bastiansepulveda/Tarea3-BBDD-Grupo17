@@ -115,11 +115,16 @@ def update_usuario(id):
 	if (json.get('nombre') or json.get('apellido') or json.get('correo') or json.get('contraseña') or json.get('pais')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	usuario.nombre = json['nombre']
-	usuario.apellido = json['apellido']
-	usuario.correo = json['correo']
-	usuario.contraseña = json['contraseña']
-	usuario.pais = json['pais']
+	if json.get('nombre') is not None:
+		usuario.nombre = json['nombre']
+	if json.get('apellido') is not None:
+		usuario.apellido = json['apellido']
+	if json.get('correo') is not None:
+		usuario.correo = json['correo']
+	if json.get('contraseña') is not None:
+		usuario.contraseña = json['contraseña']
+	if json.get('pais') is not None:
+		usuario.pais = json['pais']
 
 	usuario.update()
 
@@ -177,8 +182,10 @@ def update_cuenta(numero_cuenta):
 	if (json.get('id_usuario') or json.get('balance')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	cuenta.id_usuario = json['id_usuario']
-	cuenta.balance = json['balance']
+	if json.get('id_usuario') is not None:
+		cuenta.id_usuario = json['id_usuario']
+	if json.get('balance') is not None:
+		cuenta.balance = json['balance']
 
 	cuenta.update()
 
@@ -236,8 +243,10 @@ def update_moneda(id):
 	if (json.get('sigla') or json.get('nombre')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	moneda.sigla = json['sigla']
-	moneda.nombre = json['nombre']
+	if json.get('sigla'):
+		moneda.sigla = json['sigla']
+	if json.get('nombre'):
+		moneda.nombre = json['nombre']
 
 	moneda.update()
 
