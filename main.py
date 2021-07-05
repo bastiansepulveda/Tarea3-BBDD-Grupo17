@@ -14,7 +14,6 @@ def create_app(enviroment):
 	return app
 
 # Accedemos a la clase config del archivo config.py
-
 enviroment = config['development']
 app = create_app(enviroment)
 
