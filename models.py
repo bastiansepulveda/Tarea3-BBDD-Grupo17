@@ -124,7 +124,6 @@ class CuentaBancaria(db.Model):
 		except:
 			return False
 
-
 ### Se crea la entidad Moneda ####
 
 class Moneda(db.Model):
@@ -135,7 +134,6 @@ class Moneda(db.Model):
 	@classmethod
 	def create(cls, sigla, nombre):
 		# Instanciamos un nuevo usuario y lo guardamos en la bd
-		#print(Moneda.custom().fetchall()[0][0])
 		moneda = Moneda(sigla=sigla, nombre=nombre)
 		return moneda.save()
 
@@ -152,6 +150,83 @@ class Moneda(db.Model):
 			'id': self.id,
 			'sigla': self.sigla,
 			'nombre': self.nombre
+		}
+	def update(self):
+		self.save()
+	def delete(self):
+		try:
+			db.session.delete(self)
+			db.session.commit()
+
+			return True
+		except:
+			return False
+	
+
+#### Se crea la entidad Usuario Tiene Moneda  ###
+
+class UsuarioTieneMoneda(db.Model):
+	id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), primary_key=True)
+	id_moneda = db.Column(db.Integer, db.ForeignKey('moneda.id'), primary_key=True)
+	balance = db.Column(db.Float, nullable=False)
+
+	@classmethod
+	def create(cls, id_usuario, id_moneda, balance):
+		# Instanciamos un nuevo usuario y lo guardamos en la bd
+		utm = UsuarioTieneMoneda(id_usuario=id_usuario, id_moneda=id_moneda, balance=balance)
+		return utm.save()
+
+	def save(self):
+		try:
+			db.session.add(self)
+			db.session.commit()
+
+			return self
+		except:
+			return False
+	def json(self):
+		return {
+			'id_usuario': self.id_usuario,
+			'id_moneda': self.id_moneda,
+			'balance': self.balance
+		}
+	def update(self):
+		self.save()
+	def delete(self):
+		try:
+			db.session.delete(self)
+			db.session.commit()
+
+			return True
+		except:
+			return False
+
+####  Se crea la entidad Precio Moneda ####
+
+class PrecioMoneda(db.Model):
+	fecha = db.Column(db.DateTime, default=db.func.current_timestamp(), primary_key=True)
+	id_moneda = db.Column(db.Integer, db.ForeignKey('moneda.id'), nullable=False)
+	valor = db.Column(db.Float, nullable=False)
+
+	@classmethod
+	def create(cls, id_moneda, valor):
+		# Instanciamos un nuevo usuario y lo guardamos en la bd
+		precio = PrecioMoneda(fecha=db.func.current_timestamp(), id_moneda=id_moneda, valor=valor)
+		return precio.save()
+
+	def save(self):
+		try:
+			db.session.add(self)
+			db.session.commit()
+
+			return self
+		except:
+			return False
+	def json(self):
+		return {
+			'fecha': self.fecha,
+			'id_moneda': self.id_moneda,
+			'valor': self.valor
 		}
 	def update(self):
 		self.save()
