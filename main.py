@@ -30,7 +30,7 @@ def get_paises():
 def get_pais(cod_pais):
 	pais = Pais.query.filter_by(cod_pais=cod_pais).first()
 	if pais is None:
-		return jsonify({'message': 'Pais does not exists'}), 404
+		return jsonify({'message': 'El país no existe'}), 404
 
 	return jsonify({'pais': pais.json() })
 
@@ -51,7 +51,7 @@ def create_pais():
 def update_pais(cod_pais):
 	pais = Pais.query.filter_by(cod_pais=cod_pais).first()
 	if pais is None:
-		return jsonify({'message': 'Pais does not exists'}), 404
+		return jsonify({'message': 'El país no existe'}), 404
 
 	json = request.get_json(force=True)
 	if json.get('nombre') is None:
@@ -88,7 +88,7 @@ def get_usuarios():
 def get_usuario(id):
 	usuario = Usuario.query.filter_by(id=id).first()
 	if usuario is None:
-		return jsonify({'message': 'Usuario does not exists'}), 404
+		return jsonify({'message': 'El usuario no existe'}), 404
 
 	return jsonify({'usuario': usuario.json() })
 
@@ -109,13 +109,13 @@ def create_usuario():
 def update_usuario(id):
 	usuario = Usuario.query.filter_by(id=id).first()
 	if usuario is None:
-		return jsonify({'message': 'Usuario does not exists'}), 404
+		return jsonify({'message': 'El usuario no existe'}), 404
 
 	json = request.get_json(force=True)
 	if (json.get('nombre') or json.get('apellido') or json.get('correo') or json.get('contraseña') or json.get('pais')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	#Se deja la posibilidad de actualizar uno o mas tributos del usuario
+	#Se deja la posibilidad de actualizar uno o mas atributos del usuario
 	if json.get('nombre') is not None:
 		usuario.nombre = json['nombre']
 	if json.get('apellido') is not None:
@@ -156,7 +156,7 @@ def get_cuentas():
 def get_cuenta(numero_cuenta):
 	cuenta = CuentaBancaria.query.filter_by(numero_cuenta=numero_cuenta).first()
 	if cuenta is None:
-		return jsonify({'message': 'Cuenta does not exists'}), 404
+		return jsonify({'message': 'La cuenta bancaria no existe'}), 404
 
 	return jsonify({'cuenta': cuenta.json() })
 
@@ -177,13 +177,13 @@ def create_cuenta():
 def update_cuenta(numero_cuenta):
 	cuenta = CuentaBancaria.query.filter_by(numero_cuenta=numero_cuenta).first()
 	if cuenta is None:
-		return jsonify({'message': 'Cuenta does not exists'}), 404
+		return jsonify({'message': 'La cuenta bancaria no existe'}), 404
 
 	json = request.get_json(force=True)
 	if (json.get('id_usuario') or json.get('balance')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	#Se deja la posibilidad de actualizar uno o más tributos de la cuenta bancaria
+	#Se deja la posibilidad de actualizar uno o más atributos de la cuenta bancaria
 	if json.get('id_usuario') is not None:
 		cuenta.id_usuario = json['id_usuario']
 	if json.get('nombre') is not None:
@@ -198,7 +198,7 @@ def update_cuenta(numero_cuenta):
 def delete_cuenta(numero_cuenta):
 	cuenta = CuentaBancaria.query.filter_by(numero_cuenta=numero_cuenta).first()
 	if cuenta is None:
-		return jsonify({'message': 'La cuenta no existe'}), 404
+		return jsonify({'message': 'La cuenta bancaria no existe'}), 404
 
 	cuenta.delete()
 
@@ -218,7 +218,7 @@ def get_monedas():
 def get_moneda(id):
 	moneda = Moneda.query.filter_by(id=id).first()
 	if moneda is None:
-		return jsonify({'message': 'Moneda does not exists'}), 404
+		return jsonify({'message': 'La moneda no existe'}), 404
 
 	return jsonify({'cuenta': moneda.json() })
 
@@ -239,13 +239,13 @@ def create_moneda():
 def update_moneda(id):
 	moneda = Moneda.query.filter_by(id=id).first()
 	if moneda is None:
-		return jsonify({'message': 'Moneda does not exists'}), 404
+		return jsonify({'message': 'La moneda no existe'}), 404
 
 	json = request.get_json(force=True)
 	if (json.get('sigla') or json.get('nombre')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	#Se deja la posibilidad de actualizar uno o mas tributos de la moneda
+	#Se deja la posibilidad de actualizar uno o mas atributos de la moneda
 	if json.get('sigla') is not None:
 		moneda.sigla = json['sigla']
 	if json.get('nombre') is not None:
@@ -266,6 +266,7 @@ def delete_moneda(id):
 
 	return jsonify({'moneda': moneda.json() })
 
+
 ###### USUARIO TIENE MONEDA ######
 
 # Endpoint para obtener todas las monedas que posee cada usuario
@@ -279,7 +280,7 @@ def get_utms():
 def get_utm(id_usuario, id_moneda):
 	utm = UsuarioTieneMoneda.query.filter_by(id_usuario=id_usuario, id_moneda=id_moneda).first()
 	if utm is None:
-		return jsonify({'message': 'Utm does not exists'}), 404
+		return jsonify({'message': 'No existen usuarios con esta moneda'}), 404
 
 	return jsonify({'utm': utm.json() })
 
@@ -300,17 +301,13 @@ def create_utm():
 def update_utm(id_usuario, id_moneda):
 	utm = UsuarioTieneMoneda.query.filter_by(id_usuario=id_usuario, id_moneda=id_moneda).first()
 	if utm is None:
-		return jsonify({'message': 'Utm does not exists'}), 404
+		return jsonify({'message': 'No existen usuarios con esta moneda'}), 404
 
 	json = request.get_json(force=True)
 	if (json.get('id_usuario') or json.get('id_moneda') or json.get('balance')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	#Se deja la posibilidad de actualizar uno o mas tributos
-	if json.get('id_usuario') is not None:
-		utm.id_usuario= json['id_usuario']
-	if json.get('id_moneda') is not None:
-		utm.id_moneda = json['id_moneda']
+	#Se deja la posibilidad de actualizar uno o mas atributos
 	if json.get('balance') is not None:
 		utm.balance = json['balance']
 
@@ -323,7 +320,7 @@ def update_utm(id_usuario, id_moneda):
 def delete_utm(id_usuario, id_moneda):
 	utm = UsuarioTieneMoneda.query.filter_by(id_usuario=id_usuario, id_moneda=id_moneda).first()
 	if utm is None:
-		return jsonify({'message': 'La moneda no existe'}), 404
+		return jsonify({'message': 'No existen usuarios con esta moneda'}), 404
 
 	utm.delete()
 
@@ -343,7 +340,7 @@ def get_precios():
 def get_precio(fecha):
 	precio = PrecioMoneda.query.filter_by(fecha=fecha).first()
 	if precio is None:
-		return jsonify({'message': 'Precio does not exists'}), 404
+		return jsonify({'message': 'No existe un precio registrado en esta fecha'}), 404
 
 	return jsonify({'precio': precio.json() })
 
@@ -364,7 +361,7 @@ def create_precio():
 def update_precio(fecha):
 	precio = PrecioMoneda.query.filter_by(fecha=fecha).first()
 	if precio is None:
-		return jsonify({'message': 'Precio does not exists'}), 404
+		return jsonify({'message': 'No existe un precio registrado en esta fecha'}), 404
 
 	json = request.get_json(force=True)
 	if (json.get('id_moneda') or json.get('valor')) is None:
@@ -385,7 +382,7 @@ def update_precio(fecha):
 def delete_precio(fecha):
 	precio = PrecioMoneda.query.filter_by(fecha=fecha).first()
 	if precio is None:
-		return jsonify({'message': 'La moneda no existe'}), 404
+		return jsonify({'message': 'No existe un precio registrado en esta fecha'}), 404
 
 	precio.delete()
 
