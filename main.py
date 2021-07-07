@@ -307,7 +307,7 @@ def update_utm(id_usuario, id_moneda):
 	if (json.get('id_usuario') or json.get('id_moneda') or json.get('balance')) is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	#Se deja la posibilidad de actualizar uno o mas atributos
+	#Se deja la posibilidad de actualizar el atributo balance
 	if json.get('balance') is not None:
 		utm.balance = json['balance']
 
