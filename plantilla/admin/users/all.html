@@ -1,0 +1,66 @@
+<?php include '../../include/navbar.html'; ?>
+<?php include 'CRUD/all.php'; ?>
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../../index.html');
+}
+?>
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp; &emsp;Administración de Usuarios</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Debería haber una de estas por cada usuario -->
+                        <!-- Link de las Acciones debe llevar el ID del usuario -->
+                        <tr>
+                        <!-- Iteramos sobre los elementos de la base de datos obtenidos a través de la consulta en all.php -->
+                            <?php
+                            do{
+                                echo "<tr>
+                                    <td >".$datos['id']."</td>
+                                    <td>".$datos['nombre']."</td>
+                                    <td>".$datos['apellido']."</td>
+                                    <td>".$datos['correo']."</td>"
+                            ?>
+                            <!-- A cada botón de Ver, Editar y Borrrar de cada usuario le asignamos el id correspondiente,
+                            para mostrar sus datos en la siguiente pantalla. -->
+                                    <td><a href="/admin/users/read.html?id=<?php echo $datos['id'] ; ?> " class="btn btn-primary">Ver <i
+                                        class="fas fa-search"></i></a>
+                                <a href="/admin/users/update.html?id=<?php echo $datos['id'] ; ?>" class="btn btn-warning">Editar <i
+                                        class="fas fa-edit"></i></a>
+                                <a href="/admin/users/CRUD/delete.php?id=<?php echo $datos['id'] ; ?>" class="btn btn-danger">Borrar <i
+                                        class="fas fa-trash-alt"></i></a>
+                            </td>
+                                </tr>
+                            <?php    
+                            }while($datos = pg_fetch_assoc($result))
+                            ?>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="/admin/users/create.html" class="btn btn-success">Nuevo <i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

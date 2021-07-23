@@ -1,0 +1,32 @@
+<?php include '../../include/navbar.html'; ?>
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Insertar Precios</h1>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                    <form action="php/create_precio.php" method="POST"> 
+                    <!--Se utiliza el método POST para que no se muestren
+                    los datos ingresados en la url.
+                    Además, a cada input se le agrega el atributo name para ser referenciado en el archivo create.php -->
+                        <div class="form-group">
+                            <label for="number">Id Moneda</label>
+                            <input type="number" class="form-control" placeholder="Id Moneda" id="id" name="id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="number">Valor</label>
+                            <input type="number" class="form-control" placeholder="Valor" id="valor" name="valor" required>
+                        </div>
+                        
+                            <a class="btn btn-secondary mx-3" href="../precio_moneda.html">Volver</a>
+                            <button type="submit" class="btn btn-primary">Insertar Precio</button>
+                        </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

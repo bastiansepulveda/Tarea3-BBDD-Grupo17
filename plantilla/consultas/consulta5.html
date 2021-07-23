@@ -1,0 +1,83 @@
+<?php include '../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+error_reporting(0);
+?>
+
+<?php
+
+$get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/moneda', false);
+$response = json_decode($get_data, true)['monedas'];
+                
+?>
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp;&emsp; Consulta 5</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+
+                <form method="GET">
+                <!-- A cada elemento se le agrega el atributo name, para ser referenciado en el archivo valida_login.php. -->
+                <div class="form-group">
+                    <label for="country">Seleccione la moneda</label>
+                    <select class="form-control" id="moneda" name="moneda">
+                    <?php foreach($response as $value => $label): ?>
+                    <option value = "<?php echo $label['id']; ?>"> <?php echo $label['nombre']; ?></option>
+                    <?php endforeach ?>
+                    </select>
+
+                  </div>
+                </div>
+                    <div class='d-flex justify-content-end'>
+                        <button type="submit" class="btn btn-primary">Enviar <i class="fas fa-sign-in-alt"></i></button>
+                    </div>
+                </form>
+                    </tbody>
+                </table>
+                <?php
+                
+                $moneda = $_GET['moneda'];
+
+                $get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/consulta5/'.$moneda, false);
+                $response = json_decode($get_data, true)['registros'];
+                
+                ?>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Moneda</th>
+                            <th scope="col">Cantidad Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        echo "<tr>
+                              <td>".$response[1]['Nombre']."</td>
+                              <td>".$response[0]['Balance']."</td>";
+                        ?>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

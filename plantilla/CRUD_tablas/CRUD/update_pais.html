@@ -1,0 +1,39 @@
+<?php include '../../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+<?php
+$id_update = htmlspecialchars($_GET['id']);
+$get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/pais/'.$id_update, false);
+$response = json_decode($get_data, true)['pais'];
+                
+?>
+
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Editar País</h1>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                   <!-- A cada uno de los elementos del formulario se le agrega el atributo name para ser referenciado en update.php
+                    Además, a cada elemento se le predefine el valor actual del usuario que se está editando, a excepción de la contraseña,
+                    ya que se estima conveniente que si va a editar al usuario, se tenga presente la contraseña de este, por motivos de seguridad.
+                    Seria un grave error modificarla sin conocimiento del usuario. -->
+                    <form action="php/update_pais.php?id=<?php echo $id_update; ?>" method="POST">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" id="name" name="name" value = "<?php echo $response['nombre_pais']; ?>" required>
+                        </div>
+                        
+                        <div class='d-flex justify-content-end'>
+                            <a class="btn btn-secondary mx-3" href="../pais.html">Volver</a>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<?php include '../include/navbar.html'; ?>
+<?php include 'profile.php'; ?>
+<!-- Se verifica si existe una sesión iniciada. En caso negativo, se redirige a la página principal. -->
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+?>
+
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h2>&emsp; &emsp;Mi Perfil</h2>
+        </div>
+        <img src="../img/stonksAdministrator.jpeg" class="img-fluid mx-auto d-block" alt="Stonks" style="max-width: 100%;">
+        <div class="row p-3">
+            <div class="col">
+                <!-- Aquí se muestran todos los datos del usuario, obtenidos a través del archivo profile.php -->
+                <div class="container shadow-lg rounded m-auto p-5">
+                    <p>Nombre Completo: <?php echo $datos['nombre'].' '.$datos['apellido']; ?></p>
+                    <p>Correo: <?php echo $datos['correo']; ?></p>
+                    <p>País: <?php echo $datos['pais']; ?></p>
+                    <p>Fecha de Ingreso: <?php echo $datos['fecha_registro']; ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

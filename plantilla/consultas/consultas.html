@@ -1,0 +1,83 @@
+<?php include '../include/navbar.html'; ?>
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+?>
+
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp; &emsp;Consultas</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Consultas</th>
+                            <th scope="col">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Debería haber una de estas por cada usuario -->
+                        <!-- Link de las Acciones debe llevar el ID del usuario -->
+                        <tr>
+                        <!-- Iteramos sobre los elementos de la base de datos obtenidos a través de la consulta en all.php -->
+                            <!-- A cada botón de Ver, Editar y Borrrar de cada usuario le asignamos el id correspondiente,
+                            para mostrar sus datos en la siguiente pantalla. -->
+                                    <td><a href="/consultas/consulta1.html " class="btn btn-primary">Consulta 1 <i
+                                        class="fas fa-search"></i></a>
+                            </td>
+                            <td>
+                                Entrega los usuarios registrados durante el año que se está consultando.
+                            </td>
+                                </tr>
+                                <td><a href="/consultas/consulta2.html " class="btn btn-primary">Consulta 2 <i
+                                    class="fas fa-search"></i></a>
+                        </td>
+                        <td>
+                            Entrega las cuentas bancarias que poseen un balance mayor al consultado.
+                        </td>
+                    </tr>
+                    <td><a href="/consultas/consulta3.html " class="btn btn-primary">Consulta 3 <i
+                        class="fas fa-search"></i></a>
+            </td>
+            <td>
+                Obtiene los usuarios que pertenecen al país consultado.
+            </td>
+        </tr>
+        <td><a href="/consultas/consulta4.html " class="btn btn-primary">Consulta 4 <i
+            class="fas fa-search"></i></a>
+</td>
+<td>
+    Obtiene el máximo valor histórico de la moneda seleccionada.
+</td>
+</tr>
+
+<td><a href="/consultas/consulta5.html " class="btn btn-primary">Consulta 5 <i
+    class="fas fa-search"></i></a>
+</td>
+<td>
+    Obtiene la cantidad de la moneda consultada que se encuentra en circulación.
+</td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+
+</html>

@@ -1,0 +1,89 @@
+<?php include '../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+
+error_reporting(0);
+?>
+
+<?php
+
+$get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/pais', false);
+$response = json_decode($get_data, true)['paises'];
+                
+?>
+
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp;&emsp; Consulta 3</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+
+                <form method="GET">
+                <!-- A cada elemento se le agrega el atributo name, para ser referenciado en el archivo valida_login.php. -->
+                <div class="form-group">
+                    <label for="country">Seleccione el país</label>
+                    <select class="form-control" id="pais" name="pais">
+                    <?php foreach($response as $value => $label): ?>
+                    <option value = "<?php echo $label['cod_pais']; ?>"> <?php echo $label['nombre_pais']; ?></option>
+                    <?php endforeach ?>
+                    </select>
+
+                  </div>
+                    <div class='d-flex justify-content-end'>
+                        <button type="submit" class="btn btn-primary">Enviar <i class="fas fa-sign-in-alt"></i></button>
+                    </div>
+                </form>
+                    </tbody>
+                </table>
+                
+                <?php
+                
+                $pais = $_GET['pais'];
+
+                $get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/consulta3/'.$pais, false);
+                $response = json_decode($get_data, true)['user_country'];
+
+                ?>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre Pais</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach($response as  $dato){
+                            echo "<tr>
+                                <td>".$dato['nombre_pais']."</td>
+                                <td>".$dato['nombre']."</td>
+                                <td>".$dato['apellido']."</td>";
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

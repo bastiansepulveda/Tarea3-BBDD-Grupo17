@@ -1,0 +1,29 @@
+<?php include '../../include/navbar.html'; ?>
+<?php include 'CRUD/read.php'; ?>
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Ver Usuario</h1>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                        <!-- Se muestran los datos del usuario correspondiente, cuya id se obtiene por url a través del método GET. -->
+                        <p>ID: <?php echo $datos['id']; ?></p>
+                        <p>Nombre: <?php echo $datos['nombre']; ?></p>
+                        <p>Apellido: <?php echo $datos['apellido']; ?></p>
+                        <p>Correo: <?php echo $datos['correo']; ?></p>
+                        <p>País: <?php echo $datos['pais']; ?></p>
+                        <p>Fecha de Ingreso: <?php echo $datos['fecha_registro']; ?></p>
+                        <div class='d-flex justify-content-end'>
+                            <a href="/admin/users/all.html" class="btn btn-secondary">Volver</a>
+                            <!-- A cada enlace se le asocia el id correspondiente, para ser utilizado a través del método GET. -->
+                            <a href="/admin/users/update.html?id=<?php echo $datos['id'] ; ?>" class="btn btn-warning mx-3">Editar <i class="fas fa-edit"></i></a>
+                            <a href="/admin/users/CRUD/delete.php?id=<?php echo $datos['id'] ; ?>" class="btn btn-danger">Borrar <i class="fas fa-trash-alt"></i></a></td>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<?php include '../include/navbar.html'; ?>
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+?>
+
+
+<div class='container-fluid'>
+    <div class="col p-3">
+        <h1>&emsp;&emsp;Funciones CRUD</h1>
+    </div>
+    <div class="col p-3">
+        <div class="row">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Descripción</th>
+
+                            <td> A continuación se despliegan las tablas de la base de datos, a las cuales podrá aplicar funciones del CRUD, es decir, podrá crear, leer, actualizar y eliminar elementos para la tabla que elija. </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Debería haber una de estas por cada usuario -->
+                        <!-- Link de las Acciones debe llevar el ID del usuario -->
+                        
+                        <tr>
+                                    <th>Tablas
+                            </th>
+                            <td>
+                                <a href="/CRUD_tablas/pais.html " class="btn btn-primary">País <i
+                                    class="fas fa-search"></i></a>
+                                <a href="/CRUD_tablas/usuario.html " class="btn btn-primary">Usuario <i
+                                    class="fas fa-search"></i></a>
+                                <a href="/CRUD_tablas/cuenta_bancaria.html " class="btn btn-primary">Cuenta Bancaria <i
+                                    class="fas fa-search"></i></a>
+                                <a href="/CRUD_tablas/utm.html " class="btn btn-primary">Usuario Tiene Moneda <i
+                                    class="fas fa-search"></i></a>
+                                <a href="/CRUD_tablas/moneda.html " class="btn btn-primary">Moneda <i
+                                    class="fas fa-search"></i></a>
+                                <a href="/CRUD_tablas/precio_moneda.html " class="btn btn-primary">Precio Moneda <i
+                                    class="fas fa-search"></i></a>
+                            </td>
+                               
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+
+</html>

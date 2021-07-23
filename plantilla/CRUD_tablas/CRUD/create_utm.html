@@ -1,0 +1,36 @@
+<?php include '../../include/navbar.html'; ?>
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Insertar moneda para usuario</h1>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                    <form action="php/create_utm.php" method="POST"> 
+                    <!--Se utiliza el método POST para que no se muestren
+                    los datos ingresados en la url.
+                    Además, a cada input se le agrega el atributo name para ser referenciado en el archivo create.php -->
+                        <div class="form-group">
+                            <label for="number">ID Usuario</label>
+                            <input type="number" class="form-control" placeholder="ID Usuario" id="id_usuario" name="id_usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="number">ID Moneda</label>
+                            <input type="number" class="form-control" placeholder="ID Moneda" id="id_moneda" name="id_moneda" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="number">Balance</label>
+                            <input type="number" class="form-control" placeholder="Balance" id="balance" name="balance" required>
+                        </div>
+                        
+                            <a class="btn btn-secondary mx-3" href="../cuenta_bancaria.html">Volver</a>
+                            <button type="submit" class="btn btn-primary">Insertar moneda de usuario</button>
+                        </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

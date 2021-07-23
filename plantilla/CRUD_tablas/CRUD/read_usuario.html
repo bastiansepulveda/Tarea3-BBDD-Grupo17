@@ -1,0 +1,41 @@
+<?php include '../../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+<?php
+$id_read = htmlspecialchars($_GET['id']);
+
+$get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/usuario/'.$id_read, false);
+$response = json_decode($get_data, true)['usuario'];
+
+$get_pais = callAPI('GET', 'http://127.0.0.1:5000/api/v1/pais/'.$response['pais'], false);
+$response_pais = json_decode($get_pais, true)['pais']
+                
+?>
+
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Ver Usuario</h1>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                        <!-- Se muestran los datos del usuario correspondiente, cuya id se obtiene por url a través del método GET. -->
+                        <p>ID: <?php echo $response['id']; ?></p>
+                        <p>Nombre: <?php echo $response['nombre']; ?></p>
+                        <p>Apellido: <?php echo $response['apellido']; ?></p>
+                        <p>Correo: <?php echo $response['correo']; ?></p>
+                        <p>País: <?php echo $response_pais['nombre_pais']; ?></p>
+                        <p>Fecha de Ingreso: <?php echo $response['fecha_registro']; ?></p>
+                        <div class='d-flex justify-content-end'>
+                            <a href="/CRUD_tablas/usuario.html" class="btn btn-secondary">Volver</a>
+                            <!-- A cada enlace se le asocia el id correspondiente, para ser utilizado a través del método GET. -->
+                            <a href="/CRUD_tablas/CRUD/update_usuario.html?id=<?php echo $id_read; ?>" class="btn btn-warning mx-3">Editar <i class="fas fa-edit"></i></a>
+                            <a href="/CRUD_tablas/CRUD/php/delete_usuario.php?id=<?php echo $id_read ; ?>" class="btn btn-danger">Borrar <i class="fas fa-trash-alt"></i></a></td>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

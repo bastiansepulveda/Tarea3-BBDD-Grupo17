@@ -1,0 +1,104 @@
+<?php include 'header.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/sesion/valida_sesion.php' ?>
+<!-- En el caso de no haber iniciada una sesión, se fijan los valores de user y admin como nulos. -->
+
+<?php
+session_start();
+if(!isset($_SESSION['user'])){
+    $_SESSION['user'] = NULL;
+};
+if(!isset($_SESSION['admin'])){
+    $_SESSION['admin'] = NULL;
+};
+?>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <!-- Se agrega el número del equipo. -->
+        <a class="navbar-brand" href="/index.html">Equipo 17</a>
+
+        <ul class="navbar-nav">
+        <!-- Se verifica si hay una sesión iniciada. De ser así, se muestran estos botones. Si no, no se muestran. -->
+            <?php
+            if(isset($_SESSION['user'])){
+            ?>
+            <!-- Visible solo si hay una sesión iniciada -->
+            <li class="nav-item">
+                <a class="nav-link" href="/user/profile.html">Perfil</a>
+            </li>
+            <?php
+            }
+            ?>
+            <!-- Solo los usuarios tienen billetera -->
+             <?php
+            if ($_SESSION['admin']=='f'){
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/wallet.html">Billetera</a>
+            </li>
+            <?php
+            }
+            ?>
+            
+            <!-- Solo el admin puede revisar los usuarios -->
+            <!-- Se verifica que el usuario, de haber iniciado sesión, se admin. De ser así, se muestra el botón Usuarios. Si no, no se muestra. -->
+            
+            <?php
+            if ($_SESSION['admin']=='t'){
+            ?> 
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/users/all.html">Usuarios</a>
+            </li>
+            
+            <?php
+            }
+            ?>
+            
+            <?php
+            if(isset($_SESSION['user'])){
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/consultas/consultas.html">Consultas</a>
+            </li>
+            <?php
+            }
+            ?>
+            <?php
+            if(isset($_SESSION['user'])){
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/CRUD_tablas/tablas.html">CRUD</a>
+            </li>
+            <?php
+            } ?>
+
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <!-- Se verifica si se inició sesión. De ser así, se muestra el botón. Si no, no se muestra. -->
+            <!-- Visible solo si hay una sesión iniciada -->
+            <?php
+            if(isset($_SESSION['user'])){
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/sesion/logout.php">Cerrar Sesión</a>
+            </li>
+            <?php
+            }
+            ?>
+            <!-- Se verifica que no haya una sesión iniciada. De ser así, se muestran estos botones. Caso contrario, no se muestran. -->
+            <!-- Visible solo si NO hay una sesión iniciada -->
+            <?php
+            if (!($_SESSION['user'])){
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="/sesion/log-in.html">Iniciar Sesión</a>
+            </li>
+            <!-- Visible solo si NO hay una sesión iniciada -->
+            <li class="nav-item">
+                <a class="nav-link" href="/sesion/sign-up.html">Registrarse</a>
+            </li>
+            <?php
+            }
+            ?>
+        </ul>
+    </nav>

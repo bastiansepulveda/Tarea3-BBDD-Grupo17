@@ -1,0 +1,73 @@
+<?php include '../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../../index.html');
+}
+?>
+
+<?php
+
+$get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/utm', false);
+$response = json_decode($get_data, true)['usuarios tienen moneda'];
+                
+?>
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp; &emsp;Tabla Usuarios Tienen Moneda</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Usuario</th>
+                            <th scope="col">ID Moneda</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Debería haber una de estas por cada usuario -->
+                        <!-- Link de las Acciones debe llevar el ID del usuario -->
+                        <tr>
+                        <!-- Iteramos sobre los elementos de la base de datos obtenidos a través de la consulta en all.php -->
+                        
+                            <!-- A cada botón de Ver, Editar y Borrrar de cada usuario le asignamos el id correspondiente,
+                            para< mostrar sus datos en la siguiente pantalla. -->
+                        
+                            <?php
+                            foreach($response as $dato){
+                                echo "<tr>
+                                    <td>".$dato['id_usuario']."</td>
+                                    <td>".$dato['id_moneda']."</td>
+                                    <td>".$dato['balance']."</td>"
+                            ?>
+                                    <td>
+                                <a href="/CRUD_tablas/CRUD/update_utm.html?id_usuario=<?php echo $dato['id_usuario'] ; ?>&id_moneda=<?php echo $dato['id_moneda']; ?>" class="btn btn-warning">Editar <i
+                                        class="fas fa-edit"></i></a>
+                                <a href="/CRUD_tablas/CRUD/php/delete_utm.php?id_usuario=<?php echo $dato['id_usuario'] ; ?>&id_moneda=<?php echo $dato['id_moneda']; ?>" class="btn btn-danger">Borrar <i
+                                        class="fas fa-trash-alt"></i></a>
+                            </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="/CRUD_tablas/CRUD/create_utm.html" class="btn btn-success">Nuevo <i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

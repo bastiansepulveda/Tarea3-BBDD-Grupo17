@@ -4,6 +4,8 @@ from config import config
 from models import db
 from models import Pais, Usuario, CuentaBancaria, Moneda, UsuarioTieneMoneda, PrecioMoneda
 from flask import request
+from sqlalchemy.orm import Load
+
 
 def create_app(enviroment):
 	app = Flask(__name__)
@@ -22,7 +24,7 @@ app = create_app(enviroment)
 # Endpoint para obtener todos los países
 @app.route('/api/v1/pais', methods=['GET'])
 def get_paises():
-	paises = [nombre.json() for nombre in Pais.query.all() ] 
+	paises = [nombre_pais.json() for nombre_pais in Pais.query.order_by(Pais.cod_pais.asc()).all() ] 
 	return jsonify({'paises': paises })
 
 # Endpoint para obtener al país con cod_pais igual a <cod_pais>
@@ -54,10 +56,10 @@ def update_pais(cod_pais):
 		return jsonify({'message': 'El país no existe'}), 404
 
 	json = request.get_json(force=True)
-	if json.get('nombre') is None:
+	if json.get('nombre_pais') is None:
 		return jsonify({'message': 'Bad request'}), 400
 
-	pais.nombre = json['nombre']
+	pais.nombre_pais = json['nombre_pais']
 
 	pais.update()
 
@@ -80,7 +82,7 @@ def delete_pais(cod_pais):
 # Endpoint para obtener todos los usuarios
 @app.route('/api/v1/usuario', methods=['GET'])
 def get_usuarios():
-	usuarios = [ nombre.json() for nombre in Usuario.query.all() ] 
+	usuarios = [ nombre.json() for nombre in Usuario.query.order_by(Usuario.id.asc()).all() ] 
 	return jsonify({'usuarios': usuarios })
 
 # Endpoint para obtener el usuario con id igual a <id>
@@ -148,7 +150,7 @@ def delete_usuario(id):
 # Endpoint para obtener todas las cuentas bancarias
 @app.route('/api/v1/cuenta_bancaria', methods=['GET'])
 def get_cuentas():
-	cuentas = [ cuenta.json() for cuenta in CuentaBancaria.query.all() ] 
+	cuentas = [ cuenta.json() for cuenta in CuentaBancaria.query.order_by(CuentaBancaria.numero_cuenta.asc()).all() ] 
 	return jsonify({'cuentas': cuentas })
 
 # Endpoint para obtener la cuenta bancaria con numero_cuenta igual a  <numero_cuenta>
@@ -186,8 +188,8 @@ def update_cuenta(numero_cuenta):
 	#Se deja la posibilidad de actualizar uno o más atributos de la cuenta bancaria
 	if json.get('id_usuario') is not None:
 		cuenta.id_usuario = json['id_usuario']
-	if json.get('nombre') is not None:
-		cuenta.balance = json['nombre']
+	if json.get('balance') is not None:
+		cuenta.balance = json['balance']
 
 	cuenta.update()
 
@@ -210,7 +212,7 @@ def delete_cuenta(numero_cuenta):
 # Endpoint para obtener todas las monedas
 @app.route('/api/v1/moneda', methods=['GET'])
 def get_monedas():
-	monedas = [ moneda.json() for moneda in Moneda.query.all() ] 
+	monedas = [ moneda.json() for moneda in Moneda.query.order_by(Moneda.id.asc()).all() ] 
 	return jsonify({'monedas': monedas })
 
 # Endpoint para obtener la moenda con id  igual a <id>
@@ -272,7 +274,7 @@ def delete_moneda(id):
 # Endpoint para obtener todas las monedas que posee cada usuario
 @app.route('/api/v1/utm', methods=['GET'])
 def get_utms():
-	utms = [ utm.json() for utm in UsuarioTieneMoneda.query.all() ] 
+	utms = [ utm.json() for utm in UsuarioTieneMoneda.query.order_by(UsuarioTieneMoneda.id_usuario.asc()).all() ] 
 	return jsonify({'usuarios tienen moneda': utms })
 
 # Endpoint para obtener al usuario y a la moneda con id_usuario & id_moneda igual a <id_usuario>&<id_moneda>
@@ -333,7 +335,7 @@ def delete_utm(id_usuario, id_moneda):
 # Endpoint para obtener el historial de todos los valores de todas las monedas
 @app.route('/api/v1/precio', methods=['GET'])
 def get_precios():
-	precios = [ precio.json() for precio in PrecioMoneda.query.all() ] 
+	precios = [ precio.json() for precio in PrecioMoneda.query.order_by(PrecioMoneda.id_moneda.asc()).order_by(PrecioMoneda.fecha.desc()).all() ] 
 	return jsonify({'precios monedas': precios })
 
 # Endpoint para obtener a la moneda (con cierto valor) en la  fecha igual <fecha>
@@ -388,6 +390,39 @@ def delete_precio(fecha):
 	precio.delete()
 
 	return jsonify({'precio': precio.json() })
+
+#Consulta 1
+@app.route('/api/v1/consulta1/<year_registration>', methods=['GET'])
+def get_consulta1(year_registration):
+	registros = [dict(registro) for registro in Usuario.consulta1(year_registration=year_registration).fetchall()]
+	return jsonify({'registros': registros })
+
+
+#Consulta 2
+@app.route('/api/v1/consulta2/<max_balance>', methods=['GET'])
+def get_consulta2(max_balance):
+	registros = [dict(registro) for registro in CuentaBancaria.consulta2(max_balance=max_balance).fetchall()]
+	return jsonify({'registros': registros })
+
+#Consulta 3
+@app.route('/api/v1/consulta3/<id>', methods=['GET'])
+def get_consulta3(id):
+	user_country = [{**(usuario.json()),**(pais.json())} for usuario,pais in db.session.query(Usuario,Pais).join(Pais, Usuario.pais == Pais.cod_pais).filter(Pais.cod_pais == id)]
+	return jsonify({'user_country': user_country })
+
+#Consulta 4
+@app.route('/api/v1/consulta4/<id>', methods=['GET'])
+def get_consulta4(id):
+	max_val = [ {**(moneda.json()),**(precio_moneda.json())} for moneda,precio_moneda in db.session.query(Moneda,PrecioMoneda).join(PrecioMoneda, Moneda.id == PrecioMoneda.id_moneda).filter(Moneda.id==id).order_by(PrecioMoneda.valor.desc()).limit(1)]
+	return jsonify({'max_val': max_val })
+
+#Consulta 5
+@app.route('/api/v1/consulta5/<id>', methods=['GET'])
+def get_consulta5(id):
+	registros = [dict(registro) for registro in UsuarioTieneMoneda.consulta6(id=id).fetchall()]
+	name = [dict(registro) for registro in Moneda.consulta5(id=id).fetchall()]
+	registros.append(name[0])
+	return jsonify({'registros': registros})
 
 if __name__ == '__main__':
 	app.run(debug=True)

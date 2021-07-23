@@ -1,0 +1,48 @@
+<?php include '../include/navbar.html'; ?>
+<?php include 'wallet.php'; ?>
+<!-- Se verifica si existe una sesión iniciada. En caso negativo se redirige a la página principal. -->
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+?>
+    <div class='container-fluid'>
+        <div class="row p-3">
+            <h1>&emsp; &emsp;Mi Billetera</h1>
+        </div>
+        <img src="../img/stonksAdministrator.jpeg" class="img-fluid mx-auto d-block" alt="Stonks" style="max-width: 100%;">
+        <div class="row p-3">
+            <div class="col">
+                <div class="container shadow-lg rounded m-auto p-5">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Valor Actual</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se muestran los datos de las monedas que posee el usuario, obtenidas en el archivo wallet.php -->
+                            <?php
+                            while($datos2 = pg_fetch_assoc($result2)){
+                                echo "<tr>
+                                    <td >".$datos2['sigla']."</td>
+                                    <td>".$datos2['nombre']."</td>
+                                    <td>".$datos2['balance']."</td>
+                                    <td>".$datos2['valor']."</td>
+                                    <td>".$datos2['balance']*$datos2['valor']."</td>
+                                </tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
