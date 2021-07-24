@@ -424,5 +424,23 @@ def get_consulta5(id):
 	registros.append(name[0])
 	return jsonify({'registros': registros})
 
+#Consulta 6
+@app.route('/api/v1/consulta6', methods=['GET'])
+def get_consulta6():
+	registros = [dict(registro) for registro in UsuarioTieneMoneda.consulta7().fetchall()]
+	return jsonify({'registros': registros})
+
+#Consulta 7
+@app.route('/api/v1/consulta7/<fecha>', methods=['GET'])
+def get_consulta9(fecha):
+	registros = [dict(registro) for registro in PrecioMoneda.prueba(fecha=fecha).fetchall()]
+	return jsonify({'registros': registros})
+
+#Consulta 8
+@app.route('/api/v1/consulta8/<id>', methods=['GET'])
+def get_consulta8(id):
+	registros = [dict(registro) for registro in UsuarioTieneMoneda.consulta8(id=id).fetchall()]
+	return jsonify({'registros': registros})
+
 if __name__ == '__main__':
 	app.run(debug=True)

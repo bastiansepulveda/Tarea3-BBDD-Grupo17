@@ -281,6 +281,20 @@ class UsuarioTieneMoneda(db.Model):
 			return result
 		except:
 			return False
+	#Consulta 6
+	def consulta7():
+		try:
+			result = db.session.execute('SELECT moneda.nombre AS "Nombre", COUNT(usuario_tiene_moneda.id_moneda) AS "Cantidad Usuarios" FROM moneda INNER JOIN usuario_tiene_moneda ON moneda.id = usuario_tiene_moneda.id_moneda GROUP BY moneda.nombre ORDER BY COUNT(usuario_tiene_moneda.id_moneda) DESC LIMIT 3')
+			return result
+		except:
+			return False
+	#Consulta 8
+	def consulta8(id):
+		try:
+			result = db.session.execute('SELECT usuario.nombre AS "Nombre", usuario.apellido AS "Apellido", moneda.nombre AS "Nombre Moneda", usuario_tiene_moneda.balance AS "Cantidad" FROM moneda, usuario, usuario_tiene_moneda WHERE usuario_tiene_moneda.id_usuario = usuario.id and usuario_tiene_moneda.id_moneda = moneda.id and usuario_tiene_moneda.balance = (SELECT MAX(usuario_tiene_moneda.balance) FROM usuario_tiene_moneda WHERE usuario_tiene_moneda.id_usuario =:id) LIMIT 1',{'id':id})
+			return result
+		except:
+			return False
 
 ####  Se crea la entidad Precio Moneda ####
 
@@ -317,5 +331,12 @@ class PrecioMoneda(db.Model):
 			db.session.commit()
 
 			return True
+		except:
+			return False
+	#Consulta 7
+	def prueba(fecha):
+		try:
+			result = db.session.execute('SELECT moneda.nombre AS "Moneda", COUNT(precio_moneda.valor) AS "Veces que cambió de valor" FROM moneda INNER JOIN precio_moneda ON moneda.id = precio_moneda.id_moneda WHERE EXTRACT(YEAR from precio_moneda.fecha) = EXTRACT(YEAR from TIMESTAMP :fexa) and EXTRACT(MONTH from precio_moneda.fecha) =EXTRACT(MONTH from TIMESTAMP :fexa) GROUP BY moneda.nombre ORDER BY COUNT(precio_moneda.valor) DESC LIMIT 1',{'fexa':fecha})
+			return result
 		except:
 			return False

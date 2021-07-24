@@ -1,0 +1,75 @@
+<?php include '../include/navbar.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/callAPI.php'; ?>
+
+<!-- Verificamos si existe una sesión iniciada. Si no, redirige a la página principal. -->
+
+<?php
+if(!isset($_SESSION['user'])){
+    header('location:../index.html');
+}
+error_reporting(0);
+
+?>
+
+<div class='container-fluid'>
+    <div class="row p-3">
+        <h1>&emsp; &emsp;Consulta 8</h1>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <!-- Mostrar aquí los datos de cada usuario -->
+            <div class="container shadow-lg rounded m-auto p-5">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+
+                <form method="GET">
+                <!-- A cada elemento se le agrega el atributo name, para ser referenciado en el archivo valida_login.php. -->
+                    <div class="form-group">
+                        <label for="number">Ingrese Id del usuario </label>
+                        <input type="numer" class="form-control"  id="user" name="user">
+                    </div>
+                    <div class='d-flex justify-content-end'>
+                        <button type="submit" class="btn btn-primary">Enviar <i class="fas fa-sign-in-alt"></i></button>
+                    </div>
+                </form>
+                    </tbody>
+                </table>
+                
+                <?php
+                
+                $user = $_GET['user'];
+
+                $get_data = callAPI('GET', 'http://127.0.0.1:5000/api/v1/consulta8/'.$user, false);
+                $response = json_decode($get_data, true)['registros'];
+                
+                ?>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Nombre Moneda</th>
+                            <th scope="col"> Cantidad </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            echo "<tr>
+                                <td>".$response[0]['Nombre']."</td>
+                                <td>".$response[0]['Apellido']."</td>
+                                <td>".$response[0]['Nombre Moneda']."</td>
+                                <td>".$response[0]['Cantidad']."</td>";
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
