@@ -99,10 +99,10 @@ def get_usuario(id):
 def create_usuario():
 	json = request.get_json(force=True)
 
-	if (json.get('nombre') or json.get('apellido') or json.get('correo') or json.get('contraseña') or json.get('pais')) is None:
+	if (json.get('nombre') or json.get('apellido') or json.get('correo') or json.get('contraseña') or json.get('pais') or json.get('admin')) is None:
 		return jsonify({'message': 'El formato está mal'}), 400
 
-	usuario = Usuario.create(json['nombre'], json['apellido'], json['correo'], json['contraseña'], json['pais'])
+	usuario = Usuario.create(json['nombre'], json['apellido'], json['correo'], json['contraseña'], json['pais'],json['admin'])
 
 	return jsonify({'usuario': usuario.json() })
 

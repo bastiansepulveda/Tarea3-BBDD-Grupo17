@@ -6,8 +6,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $nombre = $_POST['name'];
     $apellido = $_POST['surname'];
     $correo = $_POST['email'];
-    $contraseña = $_POST['pwd'];
+    $hashing = hash('ripemd160', $_POST['pwd']);
+    $contraseña = $hashing;
     $pais = $_POST['pais'];
+    $test_mode_mail = ($_POST['Admin'] === 'true');
+    $admin = $test_mode_mail;
 
     $create_usuario = array(
         'nombre' => $nombre,
@@ -15,6 +18,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         'correo' => $correo,
         'contraseña' => $contraseña,
         'pais' => $pais,
+        'admin' => $admin,
     );
     $result = callAPI('POST', 'http://127.0.0.1:5000/api/v1/usuario', json_encode($create_usuario));
 }

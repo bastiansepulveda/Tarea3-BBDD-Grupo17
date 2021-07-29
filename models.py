@@ -70,10 +70,10 @@ class Usuario(db.Model):
 
 
 	@classmethod
-	def create(cls, name, lastname, email, password, id_country, adm):
+	def create(cls, name, lastname, email, password, id_country, admin):
 		last_id = Usuario.Last_id().fetchall()[0][0]
 		# Instanciamos un nuevo usuario y lo guardamos en la bd
-		usuario = Usuario(id=last_id +1,nombre=name, apellido=lastname, correo=email, contraseña=password, pais=id_country, admin=adm)
+		usuario = Usuario(id=last_id +1,nombre=name, apellido=lastname, correo=email, contraseña=password, pais=id_country, admin=admin)
 		return usuario.save()
 
 	def save(self):
